@@ -243,12 +243,12 @@ function drawNewCard(id, text, x, y, rot, colour, sticker, animationspeed) {
         hoverClass: 'card-hover-draggable'
     });
 
-    var speed = Math.floor(Math.random() * 1000);
+    var speed = 200;
     if (typeof(animationspeed) != 'undefined') speed = animationspeed;
 
-    var startPosition = $("#create-card").position();
+    var startPosition = $("#create-card-white").position();
 
-    card.css('top', startPosition.top - card.height() * 0.5);
+    card.css('top', startPosition.top);
     card.css('left', startPosition.left - card.width() * 0.5);
 
     card.animate({
@@ -683,7 +683,7 @@ function onClickCreateCardButton(color) {
     createCard(
         'card' + uniqueID,
         '',
-        58, $('div.board-outline').height(), // hack - not a great way to get the new card coordinates, but most consistant ATM
+        20, $('div.board-outline').height() + 40, // hack - not a great way to get the new card coordinates, but most consistant ATM
         rotation,
         color);
 }
