@@ -164,6 +164,7 @@ h2 {
 .bottom-icon {
 	padding: 5px;
 	opacity: .4;
+	text-shadow: 1px 1px 1px #000;
 }
 
 .bottom-icon:hover {
@@ -225,7 +226,7 @@ h2 {
 }
 
 .names p {
-	padding: 0; margin 0;
+	padding: 0; margin: 0;
 }
 
 .names ul {
@@ -239,7 +240,7 @@ h2 {
 }
 
 .names input {
-   padding: 0; //2px 8px 2px 2px;
+    padding: 0;
     border: none;
     outline: 0;
     width: 100px;
@@ -617,3 +618,19 @@ img {
 .ui-resizable-ne { cursor: ne-resize; width: 9px; height: 9px; right: -5px; top: -5px;}
 
 .ui-icon-gripsmall-diagonal-se { background-position: -64px -224px; }
+
+.gray {
+	color: lightgray;
+}
+
+.yellow {
+	color: yellow;
+}
+
+.blue {
+	color: lightseagreen;
+}
+
+.green {
+	color: green;
+}

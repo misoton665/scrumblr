@@ -676,6 +676,18 @@ function adjustCard(offsets, doSync) {
     });
 }
 
+function onClickCreateCardButton(color) {
+    var rotation = Math.random() * 10 - 5; //add a bit of random rotation (+/- 10deg)
+    uniqueID = Math.round(Math.random() * 99999999); //is this big enough to assure uniqueness
+    //alert(uniqueID);
+    createCard(
+        'card' + uniqueID,
+        '',
+        58, $('div.board-outline').height(), // hack - not a great way to get the new card coordinates, but most consistant ATM
+        rotation,
+        color);
+}
+
 //////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////
 
@@ -692,21 +704,17 @@ $(function() {
     //setTimeout($.unblockUI, 2000);
 
 
-    $("#create-card")
-        .click(function() {
-            var rotation = Math.random() * 10 - 5; //add a bit of random rotation (+/- 10deg)
-            uniqueID = Math.round(Math.random() * 99999999); //is this big enough to assure uniqueness?
-            //alert(uniqueID);
-            createCard(
-                'card' + uniqueID,
-                '',
-                58, $('div.board-outline').height(), // hack - not a great way to get the new card coordinates, but most consistant ATM
-                rotation,
-                'white');
-                // randomCardColour());
-        });
+    $("#create-card-white")
+        .click(function(){onClickCreateCardButton('white')});
 
-
+    $("#create-card-yellow")
+        .click(function(){onClickCreateCardButton('yellow')});
+    
+    $("#create-card-green")
+        .click(function(){onClickCreateCardButton('green')});
+    
+    $("#create-card-blue")
+        .click(function(){onClickCreateCardButton('blue')});
 
     // Style changer
     $("#smallify").click(function() {
