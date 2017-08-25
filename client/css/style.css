@@ -80,7 +80,7 @@ body {
 .card-icon {
 display:none;
 position: absolute;
-top: 3%; left: 82%;
+top: 0%; right: 20px;
 opacity: .3;
 width: 16px; height: 16px;
 }
@@ -620,7 +620,7 @@ img {
 .ui-icon-gripsmall-diagonal-se { background-position: -64px -224px; }
 
 .gray {
-	color: lightgray;
+	color: gray;
 }
 
 .yellow {
