@@ -128,6 +128,23 @@ io.sockets.on('connection', function (client) {
 				});
 
 				break;
+		
+			case 'resizeCard':
+				message_out = {
+					action: message.action,
+					data: {
+						id: scrub(message.data.id),
+						h: scrub(message.data.h),
+						w: scrub(message.data.w)
+					}
+				};
+
+				broadcastToRoom( client, message_out );
+
+				getRoom(client, function(room) {
+					db.cardSetHW( room, message.data.id, message.data.h, message.data.w );
+				});
+				break;
 
 			case 'moveCard':
 				//report to all other browsers
@@ -163,9 +180,11 @@ io.sockets.on('connection', function (client) {
 				clean_data.y = scrub(data.y);
 				clean_data.rot = scrub(data.rot);
 				clean_data.colour = scrub(data.colour);
+				clean_data.h = scrub(data.h);
+				clean_data.w = scrub(data.w);
 
 				getRoom(client, function(room) {
-					createCard( room, clean_data.id, clean_data.text, clean_data.x, clean_data.y, clean_data.rot, clean_data.colour);
+					createCard( room, clean_data.id, clean_data.text, clean_data.x, clean_data.y, clean_data.rot, clean_data.colour, clean_data.h, clean_data.w);
 				});
 
 				message_out = {
@@ -429,7 +448,7 @@ function broadcastToRoom ( client, message ) {
 }
 
 //----------------CARD FUNCTIONS
-function createCard( room, id, text, x, y, rot, colour ) {
+function createCard( room, id, text, x, y, rot, colour, h, w ) {
 	var card = {
 		id: id,
 		colour: colour,
@@ -437,6 +456,8 @@ function createCard( room, id, text, x, y, rot, colour ) {
 		x: x,
 		y: y,
 		text: text,
+		h: h,
+		w: w,
 		sticker: null
 	};
 
@@ -479,15 +500,15 @@ function cleanAndInitializeDemoRoom()
 		db.createColumn( '/demo', 'Complete' );
 
 
-		createCard('/demo', 'card1', 'Hello this is fun', roundRand(600), roundRand(300), Math.random() * 10 - 5, 'yellow');
-		createCard('/demo', 'card2', 'Hello this is a new story.', roundRand(600), roundRand(300), Math.random() * 10 - 5, 'white');
-		createCard('/demo', 'card3', '.', roundRand(600), roundRand(300), Math.random() * 10 - 5, 'blue');
-		createCard('/demo', 'card4', '.', roundRand(600), roundRand(300), Math.random() * 10 - 5, 'green');
+		createCard('/demo', 'card1', 'Hello this is fun', roundRand(600), roundRand(300), Math.random() * 10 - 5, 'yellow', 109, 168);
+		createCard('/demo', 'card2', 'Hello this is a new story.', roundRand(600), roundRand(300), Math.random() * 10 - 5, 'white', 109, 168);
+		createCard('/demo', 'card3', '.', roundRand(600), roundRand(300), Math.random() * 10 - 5, 'blue', 109, 168);
+		createCard('/demo', 'card4', '.', roundRand(600), roundRand(300), Math.random() * 10 - 5, 'green', 109, 168);
 
-		createCard('/demo', 'card5', 'Hello this is fun', roundRand(600), roundRand(300), Math.random() * 10 - 5, 'yellow');
-		createCard('/demo', 'card6', 'Hello this is a new card.', roundRand(600), roundRand(300), Math.random() * 10 - 5, 'yellow');
-		createCard('/demo', 'card7', '.', roundRand(600), roundRand(300), Math.random() * 10 - 5, 'blue');
-		createCard('/demo', 'card8', '.', roundRand(600), roundRand(300), Math.random() * 10 - 5, 'green');
+		createCard('/demo', 'card5', 'Hello this is fun', roundRand(600), roundRand(300), Math.random() * 10 - 5, 'yellow', 109, 168);
+		createCard('/demo', 'card6', 'Hello this is a new card.', roundRand(600), roundRand(300), Math.random() * 10 - 5, 'yellow', 109, 168);
+		createCard('/demo', 'card7', '.', roundRand(600), roundRand(300), Math.random() * 10 - 5, 'blue', 109, 168);
+		createCard('/demo', 'card8', '.', roundRand(600), roundRand(300), Math.random() * 10 - 5, 'green', 109, 168);
 	});
 }
 //

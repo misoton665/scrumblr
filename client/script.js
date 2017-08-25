@@ -84,6 +84,10 @@ function getMessage(m) {
         case 'roomDeny':
             //this doesn't happen yet
             break;
+        
+        case 'resizeCard':
+            resizeCard($("#" + data.id), data.h, data.w);
+            break;
 
         case 'moveCard':
             moveCard($("#" + data.id), data.position);
@@ -95,7 +99,7 @@ function getMessage(m) {
 
         case 'createCard':
             //console.log(data);
-            drawNewCard(data.id, data.text, data.x, data.y, data.rot, data.colour,
+            drawNewCard(data.id, data.text, data.x, data.y, data.rot, data.colour, data.h, data.w,
                 null);
             break;
 
@@ -160,22 +164,21 @@ $(document).bind('keyup', function(event) {
     keyTrap = event.which;
 });
 
-function drawNewCard(id, text, x, y, rot, colour, sticker, animationspeed) {
+function drawNewCard(id, text, x, y, rot, colour, h, w, sticker, animationspeed) {
     //cards[id] = {id: id, text: text, x: x, y: y, rot: rot, colour: colour};
 
-    var h = '<div id="' + id + '" class="card ' + colour +
-        ' draggable" style="-webkit-transform:rotate(' + rot +
+    var ht = '<div id="' + id + '" class="card ' + colour +
+        ' draggable resizable" style="-webkit-transform:rotate(' + rot +
         'deg);\
 	">\
 	<img src="images/icons/token/Xion.png" class="card-icon delete-card-icon" />\
-	<img class="card-image" src="images/' +
-        colour + '-card.png">\
+	<img class="card-image" src="images/white-card-new.png">\
 	<div id="content:' + id +
         '" class="content stickertarget droppable">' +
         text + '</div><span class="filler"></span>\
 	</div>';
 
-    var card = $(h);
+    var card = $(ht);
     card.appendTo('#board');
 
     //@TODO
@@ -188,6 +191,20 @@ function drawNewCard(id, text, x, y, rot, colour, sticker, animationspeed) {
     // card.click( function() {
     // 	$(this).focus();
     // } );
+
+    card.height(h);
+    card.width(w);
+
+    card.resizable({
+        stop: function(ev, ui) {
+            console.log("resizeCard");
+            sendAction('resizeCard', {
+                id: id,
+                h: ui.size.height,
+                w: ui.size.width
+            });
+        }
+    });
 
     card.draggable({
         snap: false,
@@ -243,12 +260,12 @@ function drawNewCard(id, text, x, y, rot, colour, sticker, animationspeed) {
         hoverClass: 'card-hover-draggable'
     });
 
-    var speed = Math.floor(Math.random() * 1000);
+    var speed = 200;
     if (typeof(animationspeed) != 'undefined') speed = animationspeed;
 
-    var startPosition = $("#create-card").position();
+    var startPosition = $("#create-card-white").position();
 
-    card.css('top', startPosition.top - card.height() * 0.5);
+    card.css('top', startPosition.top);
     card.css('left', startPosition.left - card.width() * 0.5);
 
     card.animate({
@@ -312,6 +329,13 @@ function onCardChange(id, text) {
     });
 }
 
+function resizeCard(card, h, w) {
+    card.animate({
+        height: h,
+        width: w
+    }, 500);
+}
+
 function moveCard(card, position) {
     card.animate({
         left: position.left + "px",
@@ -346,8 +370,8 @@ function addSticker(cardId, stickerId) {
 //----------------------------------
 // cards
 //----------------------------------
-function createCard(id, text, x, y, rot, colour) {
-    drawNewCard(id, text, x, y, rot, colour, null);
+function createCard(id, text, x, y, rot, colour, h, w) {
+    drawNewCard(id, text, x, y, rot, colour, h, w, null);
 
     var action = "createCard";
 
@@ -389,6 +413,8 @@ function initCards(cardArray) {
             card.y,
             card.rot,
             card.colour,
+            card.h,
+            card.w,
             card.sticker,
             0
         );
@@ -676,6 +702,20 @@ function adjustCard(offsets, doSync) {
     });
 }
 
+function onClickCreateCardButton(color) {
+    var rotation = Math.random() * 10 - 5; //add a bit of random rotation (+/- 10deg)
+    uniqueID = Math.round(Math.random() * 99999999); //is this big enough to assure uniqueness
+    //alert(uniqueID);
+    createCard(
+        'card' + uniqueID,
+        '',
+        20, $('div.board-outline').height() + 40, // hack - not a great way to get the new card coordinates, but most consistant ATM
+        rotation,
+        color,
+        109,
+        168);
+}
+
 //////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////
 
@@ -692,20 +732,17 @@ $(function() {
     //setTimeout($.unblockUI, 2000);
 
 
-    $("#create-card")
-        .click(function() {
-            var rotation = Math.random() * 10 - 5; //add a bit of random rotation (+/- 10deg)
-            uniqueID = Math.round(Math.random() * 99999999); //is this big enough to assure uniqueness?
-            //alert(uniqueID);
-            createCard(
-                'card' + uniqueID,
-                '',
-                58, $('div.board-outline').height(), // hack - not a great way to get the new card coordinates, but most consistant ATM
-                rotation,
-                randomCardColour());
-        });
+    $("#create-card-white")
+        .click(function(){onClickCreateCardButton('white')});
 
-
+    $("#create-card-yellow")
+        .click(function(){onClickCreateCardButton('yellow')});
+    
+    $("#create-card-green")
+        .click(function(){onClickCreateCardButton('green')});
+    
+    $("#create-card-blue")
+        .click(function(){onClickCreateCardButton('blue')});
 
     // Style changer
     $("#smallify").click(function() {
@@ -823,6 +860,10 @@ $(function() {
             adjustCard(offsets, false);
         });
         $(".board-outline").bind("resizestop", function(event, ui) {
+            if (ui.element.context.className != "board-outline ui-resizable") {
+                return;
+            }
+            console.log(ui);
             boardResizeHappened(event, ui);
             adjustCard(offsets, true);
         });

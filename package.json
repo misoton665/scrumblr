@@ -11,13 +11,17 @@
     "lib": "lib/"
   },
   "engines": {
-    "node": "0.4.7"
+    "node": ">=4.3.2"
+  },
+  "scripts": {
+    "start": "node ./server.js"
   },
   "dependencies": {
     "async": "~0.9.0",
     "compression": "^1.1.0",
     "express": "4.x",
     "jade": "~1.5.0",
+    "nconf": "^0.8.4",
     "redis": "^2.4.2",
     "sanitizer": "~0.1.1",
     "simplesets": "~1.2.0",
