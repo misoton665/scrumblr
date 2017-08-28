@@ -1,10 +1,12 @@
 .card {
-	width: 115px;
-	height: 76px;
+	/*width: 115px;
+	height: 76px;*/
+
+	width: 168px;
+	height: 109px;
 	xpadding: 5px; float: left;
 	xmargin: 0 10px 10px 0;
 	font-size: .9em;
-
 
 
 	overflow: hidden;
@@ -42,24 +44,23 @@
 }
 
 .content {
-	overflow: hidden;
+	overflow: overlay;
 	display: block;
-	width: 79px;
-	height: 45px;
-	margin: 1px 10px 0px 19px;
+	width: calc(100% - 20px);
+	height: calc(100% - 30px);
+	top: 18px;
 
 	font-family: "Arial Rounded MT Bold" , arial, serif;
 	font-size: 10px;
 	letter-spacing: 0px;
-	line-height: 9px;
-
-	xtext-shadow: 0px 0px 1px #444;
+	/*line-height: 9px;*/
 
 	opacity: 1;
 
 	color: #333;
 	text-align: center;
-	padding-top: 8px;
+	padding-top: 18px;
+	padding-left: 10px;
 }
 
 
@@ -70,7 +71,7 @@
 }
 
 
-.xcontent {
+/*.xcontent {
 	overflow: hidden;
 	display: block;
 	width: 79px;
@@ -89,4 +90,4 @@
 	color: #333;
 	text-align: center;
 	padding-top: 8px;
-}
+}*/

@@ -80,7 +80,7 @@ body {
 .card-icon {
 display:none;
 position: absolute;
-top: 0%; right: 20px;
+top: 0%; right: 0%;
 opacity: .3;
 width: 16px; height: 16px;
 }

@@ -112,7 +112,7 @@ function getMessage(m) {
             break;
 
         case 'editCard':
-            $("#" + data.id).children('.content:first').text(data.value);
+            $("#" + data.id).children('.content:first').html(data.value.replace(/\r|\n/g, '<br>'));
             break;
 
         case 'initColumns':
@@ -172,10 +172,10 @@ function drawNewCard(id, text, x, y, rot, colour, h, w, sticker, animationspeed)
         'deg);\
 	">\
 	<img src="images/icons/token/Xion.png" class="card-icon delete-card-icon" />\
-	<img class="card-image" src="images/white-card-new.png">\
+	<img class="card-image" src="images/' + colour + '-card.png">\
 	<div id="content:' + id +
         '" class="content stickertarget droppable">' +
-        text + '</div><span class="filler"></span>\
+        text.replace(/\r|\n/g, '<br>')  + '</div><span class="filler"></span>\
 	</div>';
 
     var card = $(ht);
@@ -197,7 +197,6 @@ function drawNewCard(id, text, x, y, rot, colour, h, w, sticker, animationspeed)
 
     card.resizable({
         stop: function(ev, ui) {
-            console.log("resizeCard");
             sendAction('resizeCard', {
                 id: id,
                 h: ui.size.height,
@@ -305,7 +304,7 @@ function drawNewCard(id, text, x, y, rot, colour, h, w, sticker, animationspeed)
 
     card.children('.content').editable(function(value, settings) {
         onCardChange(id, value);
-        return (value);
+        return (value.replace(/\r|\n/g, '<br>'));
     }, {
         type: 'textarea',
         submit: 'OK',
@@ -314,6 +313,11 @@ function drawNewCard(id, text, x, y, rot, colour, h, w, sticker, animationspeed)
         placeholder: 'Double Click to Edit.',
         onblur: 'submit',
         event: 'dblclick', //event: 'mouseover'
+    });
+
+    card.children('.content').bind('dblclick', function() {
+        var cardText = $(this).children('.card-edit-form').children('textarea').val();
+        $(this).children('.card-edit-form').children('textarea').val(cardText.replace(/<br>/g, '\n'));
     });
 
     //add applicable sticker
