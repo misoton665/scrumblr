@@ -372,7 +372,7 @@ function initClient ( client )
 
 		db.getTheme( room, function(theme) {
 
-			if (theme === null) theme = 'bigcards';
+			if (theme === null || theme == '') theme = 'bigcards';
 
 			client.json.send(
 				{
